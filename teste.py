@@ -1,13 +1,19 @@
 #deve-se baixar estas biblioetas antes da sua utilizaçao 
-from time import sleep
+from dataclasses import replace
 import speech_recognition as sr #biblioteca do reconheimento de fala
 import os #bibliotea de acesso ao sistema operaional
 import gtts
 from playsound import playsound
+import datetime
+import pyttsx3 #vozPython.setProperty('volume', 0.7)
+import wikipedia
+import pywhatkit
+
+vozPython = pyttsx3.init()
 
 repete = True #variavel de controle
 controle_Save = False#variavel que verifica se o arquivo ja foi salvo na pasta ou não
-def ouvir_mirofone(): #funçao que ouve e reconhee a fala   
+def ouvir_microfone(): #funçao que ouve e reconhee a fala   
     microfone = sr.Recognizer() #habilita o microfone  
     with sr.Microphone() as source:#com o objeto (sr) utilizamos a funçao (microphone) e atribuimos a variavel (source)  
         print('[ Diga PYTHON para interagir comigo ]')     
@@ -17,8 +23,8 @@ def ouvir_mirofone(): #funçao que ouve e reconhee a fala
         iniciador = microfone.recognize_google(audio,language='pt-BR')#funçao de reconhecimento da fala/de padroes, base de dados do deep learning
         #print(iniciador)      
         if("Python" in iniciador):
-            print('LISTEN: ...') 
             playsound('escuto_Intro.mp3')
+            print('LISTEN: ...')        
             with sr.Microphone() as source:
                 audio2 = microfone.listen(source)                 
                 executar = microfone.recognize_google(audio2,language='pt-BR')
@@ -32,7 +38,8 @@ def ouvir_mirofone(): #funçao que ouve e reconhee a fala
                             executarN.save('arquivo.mp3') #objeto executar usa o metodo save e define o nome do arquivo mp3
                         playsound('arquivo.mp3')#tocando o arquivo                      
                 os.system("start Opera.exe")#passa o arquivo que deve ser aberto apos encontrar a palavra determinada no (if)
-                controle_Save=True 
+                controle_Save=True
+                 
             elif "Spotify" in executar:
                 with open('musica.txt', 'r') as arquivo:#abrindo o arquivo de texto, [arquivo] e o objeto - 'r' é read/leitura.
                     for linha in arquivo:#laço for q cria a variavel linha q recebe os dados do arquivo 
@@ -42,6 +49,26 @@ def ouvir_mirofone(): #funçao que ouve e reconhee a fala
                         playsound('musica.mp3')#tocando o arquivo
                 os.system("start Spotify.exe")
                 controle_Save=True
+                
+            elif "horario" in executar:
+                print('pp')
+                horario = datetime.datetime.now().strftime("%H: %M") #pega o horario atual, strftime formataçao de hora - minuto
+                fala = "agora são "+ horario
+                vozPython.say(fala) #interpretaçao do texto
+                vozPython.runAndWait()#execuçao da linha acima 
+                
+            elif "procure" in executar:
+                print('tt')
+                procura = executar.replace("procure", "")
+                wikipedia.set_lang('pt')
+                result_procura = wikipedia.summary(procura, 2)
+                print(result_procura)
+                vozPython.say(result_procura)
+                vozPython.runAndWait()
+                
+            elif "toque" in executar:
+                p = executar.replace("toque", "")
+                procure = pywhatkit.playonyt(p)
             else: 
                 print('\tcomando invalido!')   
                      
@@ -51,5 +78,5 @@ def ouvir_mirofone(): #funçao que ouve e reconhee a fala
     except sr.UnknownValueError:#caso n seja reconhecido nenhum padrao de fala gera a exceçao         
             print('vc disse algo? fale python para interagir comigo')      
 while repete != False:    
-    ouvir_mirofone()#chama a funçao para q o codigo seja exeutado
+    ouvir_microfone()#chama a funçao para q o codigo seja exeutado
 print('\n\tEND...')
