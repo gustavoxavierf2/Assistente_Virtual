@@ -3,7 +3,6 @@ import os #bibliotea de acesso ao sistema operaional
 import gtts
 from playsound import playsound
 
-
 controle_Save = False#variavel que verifica se o arquivo ja foi salvo na pasta ou não
 def executor_Apps(executar):
     executado = False
@@ -19,7 +18,7 @@ def executor_Apps(executar):
         controle_Save=True
         executado = True
             
-    elif "Spotify" in executar:
+    elif "spotify" in executar:
         with open('musica.txt', 'r') as arquivo:#abrindo o arquivo de texto, [arquivo] e o objeto - 'r' é read/leitura.
             for linha in arquivo:#laço for q cria a variavel linha q recebe os dados do arquivo 
                 executarS = gtts.gTTS(linha,lang='pt-br')#variavel executar recebe a transriçao do arquivo txt, lang='portugues'
@@ -29,5 +28,6 @@ def executor_Apps(executar):
         os.system("start Spotify.exe")
         controle_Save=True
         executado = True
+        
     return executado
                 

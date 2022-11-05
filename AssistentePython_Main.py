@@ -8,26 +8,27 @@ from funcionalidades_Sistema import funcionalidades_Sistema
 from procure_wikipedia import procure_wikipedia
 from videos_YT import videos_YT
 
+global repete
 repete = True #variavel de controle
 while repete != False: 
+    executado = False
     try:   
         audio = ouvir_microfone()
-        if("Python" in audio):
-            executado = False
+        if("python" in audio):   
             playsound('escuto_Intro.mp3')
-            audio = audio.replace("Python", "")        
-            executado = executor_Apps(audio)
+            audio = audio.replace("python", "") 
+            executado = executor_Apps(audio) 
             
             executado = funcionalidades_Sistema(audio)
             
             executado = procure_wikipedia(audio)
             
             executado = videos_YT(audio)
-            if(executado != True):
-                print('\t[ comando invalido! ]')       
-        elif "desativar" in audio:  #desativar a escuta
-            #global repete 
-            repete = False       
+                  
+        elif "desativar" in audio:  #desativar a escuta     
+            repete = False 
+        elif(executado == False):
+                print('\t[ comando invalido! ]')         
     except sr.UnknownValueError:#caso n seja reconhecido nenhum padrao de fala gera a exceçao         
         print('vc disse algo? fale python para interagir comigo')
 print('\n\tEND...')

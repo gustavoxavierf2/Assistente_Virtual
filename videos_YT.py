@@ -5,6 +5,9 @@ def videos_YT(executar):
     executado = False
     if "toque" in executar:
         p = executar.replace("toque", "")
-        procure = pywhatkit.playonyt(p)
+        pywhatkit.playonyt(p)
         executado = True
+    else:
+         print('\t[ comando invalido! ]')
+         
     return executado
